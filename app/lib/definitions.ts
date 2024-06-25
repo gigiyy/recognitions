@@ -4,3 +4,11 @@ export type FilteredEmployeesTable = {
   email: string;
   image_url: string;
 };
+
+export type RecognitionsTable = {
+  id: string;
+  receiverId: string;
+  valueId: 'serving' | 'nerdy' | 'excellence' | 'people' | 'grow';
+  comment: string;
+  date: string;
+};

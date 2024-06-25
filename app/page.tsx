@@ -12,10 +12,10 @@ export default function Home() {
           <strong>Welcome to Employee Page.</strong>
         </p>
         <Link
-          href="/login"
+          href="/employees"
           className="flex items-center gap-5 self-start rounded-lg bg-blue-500 px-6 py-3 text-sm font-medium text-white transition-colors hover:bg-blue-400 md:text-base"
         >
-          <span>Log in</span> <ArrowRightIcon className="w-5 md:w-6" />
+          <span>Send Recognition</span> <ArrowRightIcon className="w-5 md:w-6" />
         </Link>
       </div>
     </main>

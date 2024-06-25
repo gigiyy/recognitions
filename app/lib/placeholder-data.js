@@ -13,6 +13,17 @@ const employees = [
   },
 ];
 
+const recognitions = [
+  {
+    id: '26B45E2D-45BB-4B0F-92A2-D11553BD18E7',
+    receiverId: employees[1].id,
+    valueId: 'grow',
+    comment: 'good job!',
+    date: '2024-05-01',
+  },
+];
+
 module.exports = {
   employees,
+  recognitions,
 };

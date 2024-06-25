@@ -1,5 +1,5 @@
 const { db } = require('@vercel/postgres');
-const { employees } = require('../app/lib/placeholder-data.js');
+const { employees, recognitions } = require('../app/lib/placeholder-data.js');
 
 async function seedEmployees(client) {
   try {
@@ -36,10 +36,47 @@ async function seedEmployees(client) {
   }
 }
 
+async function seedRecognitions(client) {
+  try {
+    await client.sql`CREATE EXTENSION IF NOT EXISTS "uuid-ossp"`;
+
+    const createTable = await client.sql`
+    CREATE TABLE IF NOT EXISTS recognitions (
+    id UUID DEFAULT uuid_generate_v4() PRIMARY KEY,
+    receiver_id UUID NOT NULL,
+    value_id TEXT NOT NULL,
+    comment TEXT NOT NULL,
+    date DATE NOT NULL
+    );`;
+
+    console.log('Created "Recognitions" table');
+
+    const insertedRecognitions = await Promise.all(
+      recognitions.map(
+        (recon) => client.sql`
+      INSERT INTO recognitions (id, receiver_id, value_id, comment, date)
+      VALUES (${recon.id}, ${recon.receiverId}, ${recon.valueId}, ${recon.comment}, ${recon.date});
+      `,
+      ),
+    );
+
+    console.log(`Seeded ${insertedRecognitions.length} recognitions`);
+
+    return {
+      createTable,
+      recognitions: insertedRecognitions,
+    };
+  } catch (err) {
+    console.error('Error seeding recognitions:', err);
+    throw err;
+  }
+}
+
 async function main() {
   const client = await db.connect();
 
   await seedEmployees(client);
+  await seedRecognitions(client);
 
   await client.end();
 }
