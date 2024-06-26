@@ -10,6 +10,7 @@ async function seedEmployees(client) {
     id UUID DEFAULT uuid_generate_v4() PRIMARY KEY,
     name TEXT NOT NULL,
     email TEXT NOT NULL,
+    manager_id UUID NOT NULL,
     image_url TEXT NOT NULL
     );`;
 
@@ -18,8 +19,8 @@ async function seedEmployees(client) {
     const insertedEmployees = await Promise.all(
       employees.map(
         (employee) => client.sql`
-      INSERT INTO employees (id, name, email, image_url)
-      VALUES (${employee.id}, ${employee.name}, ${employee.email}, ${employee.image_url});
+      INSERT INTO employees (id, name, email, manager_id, image_url)
+      VALUES (${employee.id}, ${employee.name}, ${employee.email}, ${employee.manager_id}, ${employee.image_url});
       `,
       ),
     );
@@ -44,6 +45,7 @@ async function seedRecognitions(client) {
     CREATE TABLE IF NOT EXISTS recognitions (
     id UUID DEFAULT uuid_generate_v4() PRIMARY KEY,
     receiver_id UUID NOT NULL,
+    sender_id UUID NOT NULL,
     value_id TEXT NOT NULL,
     comment TEXT NOT NULL,
     date DATE NOT NULL
@@ -54,8 +56,8 @@ async function seedRecognitions(client) {
     const insertedRecognitions = await Promise.all(
       recognitions.map(
         (recon) => client.sql`
-      INSERT INTO recognitions (id, receiver_id, value_id, comment, date)
-      VALUES (${recon.id}, ${recon.receiverId}, ${recon.valueId}, ${recon.comment}, ${recon.date});
+      INSERT INTO recognitions (id, receiver_id, sender_id, value_id, comment, date)
+      VALUES (${recon.id}, ${recon.receiverId}, ${recon.senderId}, ${recon.valueId}, ${recon.comment}, ${recon.date});
       `,
       ),
     );

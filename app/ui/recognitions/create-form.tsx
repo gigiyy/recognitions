@@ -9,6 +9,7 @@ import Link from 'next/link';
 import { Button } from '@/app/ui/button';
 import { createRecognition, State } from '@/app/lib/actions';
 import { useActionState } from 'react';
+import { values } from '@/app/lib/definitions';
 
 export default function Form({
   receiverId,
@@ -17,14 +18,6 @@ export default function Form({
   receiverId: string;
   receiverName: string;
 }) {
-  const values = [
-    { id: 'serving', name: 'Lead by Serving' },
-    { id: 'nerdy', name: 'Stay Nerdy' },
-    { id: 'excellence', name: 'Produce Excellence' },
-    { id: 'people', name: 'Value People' },
-    { id: 'grow', name: 'Grow & Get Better' },
-  ];
-
   const initialState: State = { message: null, errors: {} };
   const [state, formAction] = useActionState(createRecognition, initialState);
 

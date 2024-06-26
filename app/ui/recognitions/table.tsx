@@ -1,28 +1,25 @@
 import Image from 'next/image';
-import { lusitana } from '@/app/ui/fonts';
 import Search from '@/app/ui/search';
-import { FilteredEmployeesTable } from '@/app/lib/definitions';
-import { CreateRecognition, ShowDetails } from '@/app/ui/employees/buttons';
+import { FormattedRecognitionsTable } from '@/app/lib/definitions';
+import { values } from '@/app/lib/definitions';
 
-export default async function EmployeesTable({
-  employees,
+export default function EmployeesTable({
+  recognitions,
 }: {
-  employees: FilteredEmployeesTable[];
+  recognitions: FormattedRecognitionsTable[];
 }) {
+  console.log(recognitions);
   return (
     <div className="w-full">
-      <h1 className={`${lusitana.className} mb-8 text-xl md:text-2xl`}>
-        Employees
-      </h1>
       <Search placeholder="Search employees..." />
       <div className="mt-6 flow-root">
         <div className="overflow-x-auto">
           <div className="inline-block min-w-full align-middle">
             <div className="overflow-hidden rounded-md bg-gray-50 p-2 md:pt-0">
               <div className="md:hidden">
-                {employees?.map((employee) => (
+                {recognitions?.map((recognition) => (
                   <div
-                    key={employee.id}
+                    key={recognition.id}
                     className="mb-2 w-full rounded-md bg-white p-4"
                   >
                     <div className="flex items-center justify-between border-b pb-4">
@@ -30,25 +27,30 @@ export default async function EmployeesTable({
                         <div className="mb-2 flex items-center">
                           <div className="flex items-center gap-3">
                             <Image
-                              src={employee.image_url}
+                              src={recognition.sender_image_url}
                               className="rounded-full"
-                              alt={`${employee.name}'s profile picture`}
+                              alt={`${recognition.sender_name}'s profile picture`}
                               width={28}
                               height={28}
                             />
-                            <p>{employee.name}</p>
+                            <p>{recognition.sender_name}</p>
                           </div>
                         </div>
                         <p className="text-sm text-gray-500">
-                          {employee.email}
+                          {recognition.date.toString().split('T')[0]}
                         </p>
                       </div>
                     </div>
                     <div className="pt-4 text-sm">
-                      <div className="flex items-center gap-3">
-                        <CreateRecognition id={employee.id} />
-                        <ShowDetails id={employee.id} />
-                      </div>
+                      <p>
+                        {
+                          values.find((obj) => obj.id === recognition.value_id)
+                            ?.name
+                        }
+                      </p>
+                    </div>
+                    <div className="pt-4 text-sm">
+                      <p>{recognition.comment}</p>
                     </div>
                   </div>
                 ))}
@@ -57,40 +59,46 @@ export default async function EmployeesTable({
                 <thead className="rounded-md bg-gray-50 text-left text-sm font-normal">
                   <tr>
                     <th scope="col" className="px-4 py-5 font-medium sm:pl-6">
-                      Name
+                      From
                     </th>
                     <th scope="col" className="px-3 py-5 font-medium">
-                      Email
+                      Date
                     </th>
                     <th scope="col" className="px-3 py-5 font-medium">
-                      Action
+                      Recognition for
+                    </th>
+                    <th scope="col" className="px-3 py-5 font-medium">
+                      Comment
                     </th>
                   </tr>
                 </thead>
 
                 <tbody className="divide-y divide-gray-200 text-gray-900">
-                  {employees.map((employee) => (
-                    <tr key={employee.id} className="group">
+                  {recognitions.map((recognition) => (
+                    <tr key={recognition.id} className="group">
                       <td className="whitespace-nowrap bg-white py-5 pl-4 pr-3 text-sm text-black group-first-of-type:rounded-md group-last-of-type:rounded-md sm:pl-6">
                         <div className="flex items-center gap-3">
                           <Image
-                            src={employee.image_url}
+                            src={recognition.sender_image_url}
                             className="rounded-full"
-                            alt={`${employee.name}'s profile picture`}
+                            alt={`${recognition.sender_name}'s profile picture`}
                             width={28}
                             height={28}
                           />
-                          <p>{employee.name}</p>
+                          <p>{recognition.sender_name}</p>
                         </div>
                       </td>
                       <td className="whitespace-nowrap bg-white px-4 py-5 text-sm">
-                        {employee.email}
+                        {recognition.date.toString().split('T')[0]}
+                      </td>
+                      <td className="whitespace-nowrap bg-white px-4 py-5 text-sm">
+                        {
+                          values.find((obj) => obj.id === recognition.value_id)
+                            ?.name
+                        }
                       </td>
                       <td className="whitespace-nowrap bg-white px-4 py-5 text-sm group-first-of-type:rounded-md group-last-of-type:rounded-md">
-                        <div className="flex items-center gap-3">
-                          <CreateRecognition id={employee.id} />
-                          <ShowDetails id={employee.id} />
-                        </div>
+                        {recognition.comment}
                       </td>
                     </tr>
                   ))}

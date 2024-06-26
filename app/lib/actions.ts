@@ -45,12 +45,18 @@ export async function createRecognition(prevState: State, formData: FormData) {
   const { receiverId, recognition, comment } = validatedFields.data;
   const date = new Date().toISOString().split('T')[0];
 
+  // TODO need to use user id from active user
+  const senderId = '47DB6BCB-4157-4B42-984A-3DC98F561970';
   try {
-    await sql`
-    INSERT INTO recognitions (receiver_id, value_id, comment, date) 
-    VALUES (${receiverId}, ${recognition}, ${comment}, ${date})
-    `;
+    await Promise.all([
+      sql`
+        INSERT INTO recognitions (receiver_id, sender_id, value_id, comment, date) 
+        VALUES (${receiverId}, ${senderId}, ${recognition},  ${comment}, ${date})
+        `,
+      sendRecognition(receiverId),
+    ]);
   } catch (error) {
+    console.log(error);
     return {
       message: 'Database Error: Could not create recognition.',
     };
@@ -58,4 +64,22 @@ export async function createRecognition(prevState: State, formData: FormData) {
 
   revalidatePath(`/employees/${receiverId}/recognitions`);
   redirect('/employees');
+}
+
+export async function sendRecognition(receiverId: string) {
+  const notification = await sql`
+  SELECT a.name, a.email, b.name as manager_name, b.email as manager_email
+  FROM employees a
+  JOIN employees b ON a.manager_id = b.id
+  WHERE a.id = ${receiverId}
+  `;
+
+  const name = notification.rows[0].name;
+  const email = notification.rows[0].email;
+  const manager = notification.rows[0].manager_name;
+  const managerEmail = notification.rows[0].manager_email;
+
+  console.log(
+    `sending notification to ${name} of ${email} and the manager ${manager} of ${managerEmail}`,
+  );
 }
