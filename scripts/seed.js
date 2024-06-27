@@ -48,7 +48,7 @@ async function seedRecognitions(client) {
     sender_id UUID NOT NULL,
     value_id TEXT NOT NULL,
     comment TEXT NOT NULL,
-    date DATE NOT NULL
+    date TEXT NOT NULL
     );`;
 
     console.log('Created "Recognitions" table');

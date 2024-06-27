@@ -1,5 +1,4 @@
 import Image from 'next/image';
-import Search from '@/app/ui/search';
 import { FormattedRecognitionsTable } from '@/app/lib/definitions';
 import { values } from '@/app/lib/definitions';
 
@@ -11,7 +10,6 @@ export default function EmployeesTable({
   console.log(recognitions);
   return (
     <div className="w-full">
-      <Search placeholder="Search employees..." />
       <div className="mt-6 flow-root">
         <div className="overflow-x-auto">
           <div className="inline-block min-w-full align-middle">
@@ -37,7 +35,7 @@ export default function EmployeesTable({
                           </div>
                         </div>
                         <p className="text-sm text-gray-500">
-                          {recognition.date.toString().split('T')[0]}
+                          {recognition.date}
                         </p>
                       </div>
                     </div>
@@ -89,7 +87,7 @@ export default function EmployeesTable({
                         </div>
                       </td>
                       <td className="whitespace-nowrap bg-white px-4 py-5 text-sm">
-                        {recognition.date.toString().split('T')[0]}
+                        {recognition.date}
                       </td>
                       <td className="whitespace-nowrap bg-white px-4 py-5 text-sm">
                         {

@@ -13,7 +13,7 @@ export default async function Page({ params }: { params: { id: string } }) {
           { label: 'Employees', href: '/employees' },
           {
             label: `${name}'s Recognitions`,
-            href: `/employees/${id}`,
+            href: `/employees/${id}/recognitions`,
             active: true,
           },
         ]}
