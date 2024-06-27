@@ -29,6 +29,7 @@ export type State = {
 };
 
 export async function createRecognition(prevState: State, formData: FormData) {
+  console.log(formData);
   const validatedFields = CreateRecognition.safeParse({
     receiverId: formData.get('receiverId'),
     recognition: formData.get('recognition'),
